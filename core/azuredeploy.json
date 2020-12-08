@@ -13,7 +13,8 @@
             "type": "string",
             "metadata": {
                 "description": "Name for the Log Analytics workspace used to aggregate data"
-            }
+            },
+            "defaultValue": "SatisnetPOC"
         },
         "pricingTier": {
             "type": "string",
