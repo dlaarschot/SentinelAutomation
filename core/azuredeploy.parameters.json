@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "workspaceName": {
-            "value": "Satisnet-POC"
+            "value": "SatisnetPOC"
         },
         "pricingTier": {
             "value": "PerGB2018"
