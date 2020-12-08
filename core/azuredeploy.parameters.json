@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "workspaceName": {
-            "value": "Sentinel2Go"
+            "value": "Satisnet-POC"
         },
         "pricingTier": {
             "value": "PerGB2018"
@@ -27,7 +27,7 @@
             "value": false
         },
         "enableAzureConnectors": {
-            "value": false
+            "value": true
         },
         "enableMDATPIntegration": {
             "value": false
