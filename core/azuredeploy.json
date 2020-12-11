@@ -2,20 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "utcValue": {
-            "type": "string",
-            "metadata": {
-                "description": "Returns the current (UTC) datetime value in the specified format. If no format is provided, the ISO 8601 (yyyyMMddTHHmmssZ) format is used"
-            },
-            "defaultValue": "[utcNow()]"
-        },
-        "workspaceName": {
-            "type": "string",
-            "metadata": {
-                "description": "Name for the Log Analytics workspace used to aggregate data"
-            },
-            "defaultValue": "SatisnetPOC"
-        },
         "pricingTier": {
             "type": "string",
             "metadata": {
@@ -54,13 +40,6 @@
             },
             "defaultValue": []
         },
-        "enableDataConnectorsKind": {
-            "type": "array",
-            "metadata": {
-                "description": "The kind of data connectors that can be deployed via ARM templates are the following: [\"AzureActivityLog\",\"SecurityInsightsSecurityEventCollectionConfiguration\",\"WindowsFirewall\",\"DnsAnalytics\"], Reference: https://docs.microsoft.com/en-us/azure/templates/microsoft.operationalinsights/2020-03-01-preview/workspaces/datasources#microsoftoperationalinsightsworkspacesdatasources-object"
-            },
-            "defaultValue": ["Office365", "AzureActivityLog", "AzureAuditLog"]
-        },
         "enableLAFunctions": {
             "type": "array",
             "metadata": {
@@ -96,42 +75,13 @@
             },
             "defaultValue": ""
         },
-        "location": {
-            "type": "string",
-            "metadata": {
-                "description": "Location for all resources."
-            },
-            "defaultValue": "uksouth"
-        },
-        "rgName": {
-            "type": "string",
-            "metadata": {
-                "description": "Location for all resources."
-            },
-            "defaultValue": "[resourceGroup().location]"
-        },
-        "tags": {
-            "type": "object",
-            "defaultValue": {
-                "SatisnetSupport": "POC",
-                "Supplier": "Satisnet"
-            }
-        }
     },
     "variables": {
-        "uniqueWorkspace": "[concat(parameters('workspaceName'), uniquestring('SatisnetWN', parameters('utcValue')))]"
+        "uniquestring('SatisnetWN', parameters('utcValue')))]", "workspaceName": "SatisnetPOC", "enableDataConnectorsKind": ["Office365", "AzureActivityLog", "AzureAuditLog"]
     },
     "resources": [
         {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2018-05-01",
-            "location": "[parameters('location')]",
-            "name": "[parameters('rgName')]",
-            "properties": {},
-            "tags": "[parameters('tags')]"
-        },
-        {
-            "name": "[variables('uniqueWorkspace')]",
+            "name": "[variables('workspaceName')]",
             "type": "Microsoft.OperationalInsights/workspaces",
             "apiVersion": "2015-11-01-preview",
             "location": "[parameters('location')]",
@@ -146,18 +96,18 @@
             }
         },
         {
-            "name": "[concat('SecurityInsights','(', variables('uniqueWorkspace'),')')]",
+            "name": "[concat('SecurityInsights','(', variables('workspaceName'),')')]",
             "type": "Microsoft.OperationsManagement/solutions",
             "apiVersion": "2015-11-01-preview",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('uniqueWorkspace'))]"
+                "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
             ],
             "properties": {
-                "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('uniqueWorkspace'))]"
+                "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('workspaceName'))]"
             },
             "plan": {
-                "name": "[concat('SecurityInsights','(', variables('uniqueWorkspace'),')')]",
+                "name": "[concat('SecurityInsights','(', variables('workspaceName'),')')]",
                 "product": "OMSGallery/SecurityInsights",
                 "publisher": "Microsoft",
                 "promotionCode": ""
@@ -169,7 +119,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-05-01",
             "dependsOn": [
-                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', variables('uniqueWorkspace'),')'))]"
+                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', variables('workspaceName'),')'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -182,10 +132,10 @@
                         "value": "[parameters('enableAdditionalLASolutions')]"
                     },
                     "workspaceName": {
-                        "value": "[variables('uniqueWorkspace')]"
+                        "value": "[variables('workspaceName')]"
                     },
                     "workspaceId": {
-                         "value": "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('uniqueWorkspace'))]"
+                         "value": "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
                      },
                     "location": {
                         "value": "[parameters('location')]"
@@ -194,12 +144,12 @@
             }
         },
         {
-            "condition": "[not(empty(parameters('enableDataConnectorsKind')))]",
+            "condition": "[not(empty(variables('enableDataConnectorsKind')))]",
             "name": "enableDataConnectorsKind",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
             "dependsOn": [
-                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', variables('uniqueWorkspace'),')'))]"
+                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', variables('workspaceName'),')'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -209,13 +159,13 @@
                 },
                 "parameters": {
                     "dataConnectorsKind": {
-                        "value": "[parameters('enableDataConnectorsKind')]"
+                        "value": "[variables('enableDataConnectorsKind')]"
                     },
                     "workspaceName": {
-                        "value": "[variables('uniqueWorkspace')]"
+                        "value": "[variables('workspaceName')]"
                     },
                     "workspaceId": {
-                         "value": "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('uniqueWorkspace'))]"
+                         "value": "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
                      },
                      "subscriptionId": {
                          "value": "[subscription().subscriptionId]"
@@ -232,7 +182,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-05-01",
             "dependsOn": [
-                "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('uniqueWorkspace'))]"
+                "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -242,7 +192,7 @@
                 },
                 "parameters": {
                     "workspaceName": {
-                        "value": "[variables('uniqueWorkspace')]"
+                        "value": "[variables('workspaceName')]"
                     },
                     "enableLAFunctions": {
                         "value": "[parameters('enableLAFunctions')]"
@@ -257,7 +207,7 @@
             "apiVersion": "2019-10-01-preview",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', variables('uniqueWorkspace'),')'))]"
+                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', variables('workspaceName'),')'))]"
             ],
             "kind": "AzureCLI",
             "identity": {
@@ -269,7 +219,7 @@
             "properties": {
                 "forceUpdateTag": 1,
                 "azCliVersion": "2.0.80",
-                "arguments": "[concat('-r', ' ', resourceGroup().name, ' ', '-w', ' ', variables('uniqueWorkspace'))]",
+                "arguments": "[concat('-r', ' ', resourceGroup().name, ' ', '-w', ' ', variables('workspaceName'))]",
                 "primaryScriptUri": "[concat(parameters('_artifactsLocation'), 'resources/scripts/Post-AnalyticRules.sh')]",
                 "supportingScriptUris":[],
                 "timeout": "PT30M",
@@ -281,15 +231,15 @@
     "outputs": {
         "workspaceName": {
             "type": "string",
-            "value": "[variables('uniqueWorkspace')]"
+            "value": "[variables('workspaceName')]"
         },
         "workspaceIdOutput": {
             "type": "string",
-            "value": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', variables('uniqueWorkspace')), '2015-11-01-preview').customerId]"
+            "value": "[reference(resourceId('Microsoft.OperationalInsights/workspaces/', variables('workspaceName')), '2015-11-01-preview').customerId]"
         },
         "workspaceKeyOutput": {
             "type": "string",
-            "value": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', variables('uniqueWorkspace')), '2015-11-01-preview').primarySharedKey]"
+            "value": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces/', variables('workspaceName')), '2015-11-01-preview').primarySharedKey]"
         }
     }
 }
