@@ -179,6 +179,18 @@
                      },
                     "location": {
                         "value": "[parameters('location')]"
+                    },
+                    "exchangeState": {
+                        "value": "Enabled"
+                    },
+                    "sharePointState": {
+                        "value": "Enabled"
+                    },
+                    "teamsState": {
+                        "value": "Enabled"
+                    },
+                    "tenantId": {
+                        "value": "[subscription().tenantId]"
                     }
                 }
             }
