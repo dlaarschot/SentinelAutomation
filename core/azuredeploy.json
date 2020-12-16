@@ -201,9 +201,6 @@
                     "workspaceName": {
                         "value": "[variables('workspaceName')]"
                     },
-                    "workspaceId": {
-                         "value": "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
-                     },
                      "subscriptionId": {
                          "value": "[subscription().subscriptionId]"
                      },
