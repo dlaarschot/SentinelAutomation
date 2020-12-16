@@ -212,9 +212,6 @@
                     },
                     "teamsState": {
                         "value": "True"
-                    },
-                    "tenantId": {
-                        "value": "[subscription().tenantId]"
                     }
                 }
             }

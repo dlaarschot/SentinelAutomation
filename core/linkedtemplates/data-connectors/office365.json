@@ -32,6 +32,7 @@
         },
         "tenantId": {
             "type": "string",
+            "defaultValue": "[subscription().tenantId]",
             "metadata": {
                 "description": "Tenand Id"
             }
