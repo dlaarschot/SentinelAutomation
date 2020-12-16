@@ -2,10 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "guidValue": {
-            "type": "string",
-            "defaultValue": "[newGuid()]"
-        },
+
         "dataConnectorsKind": {
             "type": "array",
             "defaultValue": [],
@@ -44,37 +41,6 @@
             ],
             "metadata": {
                 "description": "Tier for gathering Windows Security Events."
-            }
-        },
-        "exchangeState": {
-            "type": "string",
-            "metadata": {
-                "description": "Exchange state"
-            }
-        },
-        "sharePointState": {
-            "type": "string",
-            "metadata": {
-                "description": "SharePoint state"
-            }
-        },
-        "teamsState": {
-            "type": "string",
-            "metadata": {
-                "description": "Teams state"
-            }
-        },
-        "tenantId": {
-            "type": "string",
-            "metadata": {
-                "description": "Tenand Id"
-            }
-        },
-        "location": {
-            "type": "string",
-            "defaultValue": "[resourceGroup().location]",
-            "metadata": {
-                "description": "Location for all resources."
             }
         }
     },
