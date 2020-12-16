@@ -84,7 +84,7 @@
         }
     },
     "variables": {
-        "workspaceName": "SatisnetPOC", "enableDataConnectorsKind": ["AzureActivityLog", "AzureAuditLog"], "enableO365": ["true"]
+        "workspaceName": "SatisnetPOC", "enableDataConnectorsKind": ["AzureActivityLog", "AzureAuditLog"], "enableO365": []
     },
     "resources": [
         {
