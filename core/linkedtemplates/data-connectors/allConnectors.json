@@ -119,28 +119,6 @@
             "properties": {
                 "state": "Enabled"
             }
-        },
-        {
-            "condition": "[contains(parameters('dataConnectorsKind'), 'Office365')]",
-            "type": "Microsoft.OperationalInsights/workspaces/dataSources",
-            "apiVersion": "2020-03-01-preview",
-            "location": "[parameters('location')]",
-            "name": "[concat(parameters('workspaceName'),'/Microsoft.SecurityInsights/',parameters('guidValue'))]",
-            "kind": "Office365",
-            "properties": {
-                "tenantId": "[parameters('tenantId')]",
-                "dataTypes": {
-                    "exchange": {
-                        "state": "[parameters('exchangeState')]"
-                    },
-                    "sharePoint": {
-                        "state": "[parameters('sharePointState')]"
-                    },
-                    "teams": {
-                        "state": "[parameters('teamsState')]"
-                    }
-                }
-            }
         }
     ]
 }
