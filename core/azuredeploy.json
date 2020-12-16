@@ -201,9 +201,6 @@
                     "workspaceName": {
                         "value": "[variables('workspaceName')]"
                     },
-                     "subscriptionId": {
-                         "value": "[subscription().subscriptionId]"
-                     },
                     "location": {
                         "value": "[parameters('location')]"
                     },
