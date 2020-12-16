@@ -84,7 +84,7 @@
         }
     },
     "variables": {
-        "workspaceName": "SatisnetPOC", "enableDataConnectorsKind": ["AzureActivityLog", "AzureAuditLog"]
+        "workspaceName": "SatisnetPOC", "enableDataConnectorsKind": ["AzureActivityLog", "AzureAuditLog"], "enableO365": ["true"]
     },
     "resources": [
         {
@@ -179,6 +179,51 @@
                      },
                     "location": {
                         "value": "[parameters('location')]"
+                    }
+                }
+            }
+        },
+        {
+            "condition": "[not(empty(variables('enableO365')))]",
+            "name": "enableOffice365",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', variables('workspaceName'),')'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('core/linkedtemplates/data-connectors/office365.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "guidValue": {
+                        "value": "[newGuid()]"
+                    },
+                    "workspaceName": {
+                        "value": "[variables('workspaceName')]"
+                    },
+                    "workspaceId": {
+                         "value": "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                     },
+                     "subscriptionId": {
+                         "value": "[subscription().subscriptionId]"
+                     },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "exchangeState": {
+                        "value": "True"
+                    },
+                    "sharePointState": {
+                        "value": "True"
+                    },
+                    "teamsState": {
+                        "value": "True"
+                    },
+                    "tenantId": {
+                        "value": "[subscription().tenantId]"
                     }
                 }
             }
