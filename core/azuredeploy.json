@@ -75,13 +75,6 @@
             },
             "defaultValue": ""
         },
-        "location": {
-            "type": "string",
-            "metadata": {
-                "description": "Location for all resources."
-            },
-            "defaultValue": "[resourceGroup().location]"
-        }
     },
     "variables": {
         "workspaceName": "SatisnetPOC", "enableDataConnectorsKind": ["AzureActivityLog", "AzureAuditLog"], "enableO365": []
