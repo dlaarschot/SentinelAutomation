@@ -75,14 +75,6 @@
             },
             "defaultValue": ""
         },
-        "rgLocation": {
-            "type": "string",
-            "defaultValue": "UK South"
-        },
-        "rgName": {
-            "type": "string",
-            "defaultValue": "Satisnet-POV"
-        },
         "location": {
             "type": "string",
             "metadata": {
@@ -97,12 +89,6 @@
         "enableO365": []
     },
     "resources": [
-        {
-            "type": "Microsoft.Resources/resourceGroups",
-            "apiVersion": "2018-05-01",
-            "location": "[parameters('rgLocation')]",
-            "name": "[parameters('rgName')]"
-        },
         {
             "name": "[variables('workspaceName')]",
             "type": "Microsoft.OperationalInsights/workspaces",
