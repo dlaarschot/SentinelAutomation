@@ -130,7 +130,6 @@
             }
         },
         {
-            "condition": "[not(empty(parameters('enableAdditionalLASolutions')))]",
             "name": "enableAdditionalLASolutions",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-05-01",
@@ -160,7 +159,6 @@
             }
         },
         {
-            "condition": "[not(empty(variables('enableDataConnectorsKind')))]",
             "name": "enableDataConnectorsKind",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
@@ -193,7 +191,6 @@
             }
         },
         {
-            "condition": "[not(empty(variables('enableO365')))]",
             "name": "enableOffice365",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-06-01",
@@ -226,7 +223,6 @@
             }
         },
         {
-            "condition": "[not(empty(parameters('enableLAFunctions')))]",
             "name": "deployLAFunctions",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2019-05-01",
