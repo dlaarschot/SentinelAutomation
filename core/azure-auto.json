@@ -8,10 +8,17 @@
                 "description": "Location for all resources."
             },
             "defaultValue": "uksouth"
+        },
+        "_artifactsLocation": {
+            "type": "string",
+            "metadata": {
+                "description": "The location of resources"
+            },
+            "defaultValue": "https://raw.githubusercontent.com/dlaarschot/SentinelAutomation/master/"
         }
     },
     "variables": {
-        "workspaceName": "AnotherOne",
+        "workspaceName": "AnotherOne"
     },
     "resources": [
         {
