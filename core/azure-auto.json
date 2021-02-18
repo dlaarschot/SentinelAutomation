@@ -1,60 +1,84 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "rgName": {
-      "type": "string"
-    },
-    "rgLocation": {
-      "type": "string"
-    },
-    "storagePrefix": {
-      "type": "string",
-      "maxLength": 11
-    }
-  },
-  "variables": {
-    "storageName": "[concat(parameters('storagePrefix'), uniqueString(subscription().id, parameters('rgName')))]"
-  },
-  "resources": [
-    {
-      "type": "Microsoft.Resources/resourceGroups",
-      "apiVersion": "2020-06-01",
-      "name": "[parameters('rgName')]",
-      "location": "[parameters('rgLocation')]",
-      "properties": {}
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-06-01",
-      "name": "storageDeployment",
-      "resourceGroup": "[parameters('rgName')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Resources/resourceGroups/', parameters('rgName'))]"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "parameters": {},
-          "variables": {},
-          "resources": [
-            {
-              "type": "Microsoft.Storage/storageAccounts",
-              "apiVersion": "2019-06-01",
-              "name": "[variables('storageName')]",
-              "location": "[parameters('rgLocation')]",
-              "sku": {
-                "name": "Standard_LRS"
-              },
-              "kind": "StorageV2"
-            }
-          ],
-          "outputs": {}
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "metadata": {
+                "description": "Location for all resources."
+            },
+            "defaultValue": "uksouth"
         }
-      }
+    },
+    "variables": {
+        "workspaceName": "AnotherOne",
+    },
+    "resources": [
+        {
+            "name": "enableDataConnectorsKind",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', variables('workspaceName'),')'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('core/linkedtemplates/data-connectors/allConnectors.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "dataConnectorsKind": {
+                        "value": [ "AzureActivityLog", "AzureAuditLog" ]
+                    },
+                    "workspaceName": {
+                        "value": "[variables('workspaceName')]"
+                    },
+                    "workspaceId": {
+                        "value": "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    },
+                    "subscriptionId": {
+                        "value": "[subscription().subscriptionId]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "enableOffice365",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-06-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationsManagement/solutions/', concat('SecurityInsights','(', variables('workspaceName'),')'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('core/linkedtemplates/data-connectors/office365.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "workspaceName": {
+                        "value": "[variables('workspaceName')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "exchangeState": {
+                        "value": "True"
+                    },
+                    "sharePointState": {
+                        "value": "True"
+                    },
+                    "teamsState": {
+                        "value": "True"
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {
     }
-  ],
-  "outputs": {}
 }
