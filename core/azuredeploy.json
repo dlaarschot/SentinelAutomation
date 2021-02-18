@@ -81,6 +81,10 @@
                 "description": "Location for all resources."
             },
             "defaultValue": "uksouth"
+        },
+        "resourcePermissions": {
+            "type": "bool",
+            "defaultValue": true
         }
     },
     "variables": {
@@ -92,12 +96,15 @@
         {
             "name": "[variables('workspaceName')]",
             "type": "Microsoft.OperationalInsights/workspaces",
-            "apiVersion": "2015-11-01-preview",
+            "apiVersion": "2020-08-01",
             "location": "[parameters('location')]",
             "properties": {
                 "retentionInDays": "[parameters('dataRetention')]",
                 "features": {
-                    "immediatePurgeDataOn30Days": "[parameters('immediatePurgeDataOn30Days')]"
+                    "immediatePurgeDataOn30Days": "[parameters('immediatePurgeDataOn30Days')]",
+                    "searchVersion": 1,
+                    "legacy": 0,
+                    "enableLogAccessUsingOnlyResourcePermissions": "[parameters('resourcePermissions')]"
                 },
                 "sku": {
                     "name": "[parameters('pricingTier')]"
