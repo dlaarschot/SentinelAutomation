@@ -75,17 +75,34 @@
             },
             "defaultValue": ""
         },
+        "rgLocation": {
+            "type": "string",
+            "defaultValue": "UK South"
+        },
+        "rgName": {
+            "type": "string",
+            "defaultValue": "Satisnet-POV"
+        },
         "location": {
             "type": "string",
             "metadata": {
                 "description": "Location for all resources."
-            }
+            },
+            "defaultValue": "uksouth"
         }
     },
     "variables": {
-        "workspaceName": "SatisnetPOC", "enableDataConnectorsKind": ["AzureActivityLog", "AzureAuditLog"], "enableO365": []
+        "workspaceName": "SatisnetPOC",
+        "enableDataConnectorsKind": [ "AzureActivityLog", "AzureAuditLog" ],
+        "enableO365": []
     },
     "resources": [
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "2018-05-01",
+            "location": "[parameters('rgLocation')]",
+            "name": "[parameters('rgName')]"
+        },
         {
             "name": "[variables('workspaceName')]",
             "type": "Microsoft.OperationalInsights/workspaces",
@@ -141,8 +158,8 @@
                         "value": "[variables('workspaceName')]"
                     },
                     "workspaceId": {
-                         "value": "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
-                     },
+                        "value": "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    },
                     "location": {
                         "value": "[parameters('location')]"
                     }
@@ -171,11 +188,11 @@
                         "value": "[variables('workspaceName')]"
                     },
                     "workspaceId": {
-                         "value": "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
-                     },
-                     "subscriptionId": {
-                         "value": "[subscription().subscriptionId]"
-                     },
+                        "value": "[resourceId('Microsoft.OperationalInsights/workspaces/', variables('workspaceName'))]"
+                    },
+                    "subscriptionId": {
+                        "value": "[subscription().subscriptionId]"
+                    },
                     "location": {
                         "value": "[parameters('location')]"
                     }
@@ -252,7 +269,7 @@
             "identity": {
                 "type": "userAssigned",
                 "userAssignedIdentities": {
-                    "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentityName'))]" : {}
+                    "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentityName'))]": {}
                 }
             },
             "properties": {
@@ -260,7 +277,7 @@
                 "azCliVersion": "2.0.80",
                 "arguments": "[concat('-r', ' ', resourceGroup().name, ' ', '-w', ' ', variables('workspaceName'))]",
                 "primaryScriptUri": "[concat(parameters('_artifactsLocation'), 'resources/scripts/Post-AnalyticRules.sh')]",
-                "supportingScriptUris":[],
+                "supportingScriptUris": [],
                 "timeout": "PT30M",
                 "cleanupPreference": "OnSuccess",
                 "retentionInterval": "P1D"
